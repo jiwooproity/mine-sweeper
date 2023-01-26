@@ -138,7 +138,7 @@ App.MineBox = styled.div`
           background-size: 100%;
         `}
 
-  cursor: pointer;
+  cursor: ${({ active }) => (active ? "default" : "pointer")};
 `;
 
 App.ObjectImage = styled.div`
