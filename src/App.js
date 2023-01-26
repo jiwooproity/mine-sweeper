@@ -27,10 +27,15 @@ const App = () => {
   const [unlockCount, setUnlockCount] = useState(0);
   const [lastSelect, setLastSelect] = useState({ X: 0, Y: 0 });
 
-  const [visited, setVisited] = useState(Array.from(Array(n), () => Array(m).fill(0)));
-  const [active, setActive] = useState(Array.from(Array(n), () => Array(m).fill(0)));
-  const [mineStatus, setMineStatus] = useState(Array.from(Array(n), () => Array(m).fill(0)));
-  const [flag, setFlag] = useState(Array.from(Array(n), () => Array(m).fill(0)));
+  // 배열 초기화
+  const initArray = () => {
+    return Array.from(Array(n), () => Array(m).fill(0));
+  };
+
+  const [visited, setVisited] = useState(initArray());
+  const [active, setActive] = useState(initArray());
+  const [mineStatus, setMineStatus] = useState(initArray());
+  const [flag, setFlag] = useState(initArray());
 
   const [finish, setFinish] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -42,8 +47,8 @@ const App = () => {
   const setRandomMine = ({ reset }) => {
     const randomValue = [];
 
-    let newActive = reset ? Array.from(Array(n), () => Array(m).fill(0)) : [...active];
-    let newMineStatus = reset ? Array.from(Array(n), () => Array(m).fill(0)) : [...mineStatus];
+    let newActive = reset ? initArray() : [...active];
+    let newMineStatus = reset ? initArray() : [...mineStatus];
 
     for (let i = 0; i < bombLength; i++) {
       const [X, Y] = [Math.floor(Math.random() * n), Math.floor(Math.random() * m)];
@@ -66,8 +71,8 @@ const App = () => {
     }
 
     if (reset) {
-      setVisited(Array.from(Array(n), () => Array(m).fill(0)));
-      setFlag(Array.from(Array(n), () => Array(m).fill(0)));
+      setVisited(initArray());
+      setFlag(initArray());
 
       setUnlockCount(0);
       setLastSelect({ X: 0, Y: 0 });
