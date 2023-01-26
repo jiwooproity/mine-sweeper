@@ -39,7 +39,7 @@ const App = () => {
   const [finish, setFinish] = useState(false);
   const [success, setSuccess] = useState(false);
 
-  const setRandomMine = () => {
+  const setRandomMine = ({ array }) => {
     const randomValue = [];
 
     let newActive = array ? array : active;
@@ -65,8 +65,7 @@ const App = () => {
       }
     }
 
-    setActive([...newActive]);
-    setMineStatus([...newMineStatus]);
+    return { newMineStatus, newActive };
   };
 
   const onHandleClick = ({ X, Y }) => {
@@ -141,7 +140,9 @@ const App = () => {
   }, [unlockCount]);
 
   useEffect(() => {
-    setRandomMine();
+    const { newMineStatus, newActive } = setRandomMine({ array: null });
+    setActive([...newActive]);
+    setMineStatus([...newMineStatus]);
     // eslint-disable-next-line
   }, []);
 
