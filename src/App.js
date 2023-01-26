@@ -32,23 +32,26 @@ const App = () => {
     return Array.from(Array(n), () => Array(m).fill(0));
   };
 
-  const [visited, setVisited] = useState(initArray());
-  const [active, setActive] = useState(initArray());
-  const [mineStatus, setMineStatus] = useState(initArray());
-  const [flag, setFlag] = useState(initArray());
+  const [visited, setVisited] = useState([]);
+  const [active, setActive] = useState([]);
+  const [mineStatus, setMineStatus] = useState([]);
+  const [flag, setFlag] = useState([]);
 
   const [finish, setFinish] = useState(false);
   const [success, setSuccess] = useState(false);
 
-  const onResetGame = () => {
-    setRandomMine({ reset: true });
+  const [ready, setReady] = useState(false);
+
+  const gameSet = () => {
+    setReady(false);
+    setRandomMine();
   };
 
-  const setRandomMine = ({ reset }) => {
+  const setRandomMine = () => {
     const randomValue = [];
 
-    let newActive = reset ? initArray() : [...active];
-    let newMineStatus = reset ? initArray() : [...mineStatus];
+    let newActive = initArray();
+    let newMineStatus = initArray();
 
     for (let i = 0; i < bombLength; i++) {
       const [X, Y] = [Math.floor(Math.random() * n), Math.floor(Math.random() * m)];
@@ -70,19 +73,18 @@ const App = () => {
       }
     }
 
-    if (reset) {
-      setVisited(initArray());
-      setFlag(initArray());
+    setVisited(initArray());
+    setFlag(initArray());
 
-      setUnlockCount(0);
-      setLastSelect({ X: 0, Y: 0 });
-
-      setFinish(false);
-      setSuccess(false);
-    }
+    setUnlockCount(0);
+    setLastSelect({ X: 0, Y: 0 });
 
     setActive([...newActive]);
     setMineStatus([...newMineStatus]);
+
+    setFinish(false);
+    setSuccess(false);
+    setReady(true);
   };
 
   const onHandleClick = ({ X, Y }) => {
@@ -157,7 +159,7 @@ const App = () => {
   }, [unlockCount]);
 
   useEffect(() => {
-    setRandomMine({ reset: false });
+    gameSet();
     // eslint-disable-next-line
   }, []);
 
@@ -210,7 +212,7 @@ const App = () => {
     <CSS.Container>
       {/* <CSS.Background src={background} /> */}
       <CSS.MineStatus>
-        <CSS.RestartButton onClick={onResetGame}>다시 시작</CSS.RestartButton>
+        <CSS.RestartButton onClick={setRandomMine}>다시 시작</CSS.RestartButton>
       </CSS.MineStatus>
       <CSS.MineStatus>
         <CSS.StatusFont>
@@ -218,7 +220,7 @@ const App = () => {
           {` - 남은 칸 : ${n * m - bombLength} / ${n * m - bombLength - unlockCount}`}
         </CSS.StatusFont>
       </CSS.MineStatus>
-      <CSS.MineWrapper>{maps.map(getMaps)}</CSS.MineWrapper>
+      <CSS.MineWrapper>{ready && maps.map(getMaps)}</CSS.MineWrapper>
     </CSS.Container>
   );
 };
