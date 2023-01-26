@@ -35,11 +35,15 @@ const App = () => {
   const [finish, setFinish] = useState(false);
   const [success, setSuccess] = useState(false);
 
-  const setRandomMine = () => {
+  const onResetGame = () => {
+    setRandomMine({ reset: true });
+  };
+
+  const setRandomMine = ({ reset }) => {
     const randomValue = [];
 
-    let newActive = active;
-    let newMineStatus = mineStatus;
+    let newActive = reset ? Array.from(Array(n), () => Array(m).fill(0)) : [...active];
+    let newMineStatus = reset ? Array.from(Array(n), () => Array(m).fill(0)) : [...mineStatus];
 
     for (let i = 0; i < bombLength; i++) {
       const [X, Y] = [Math.floor(Math.random() * n), Math.floor(Math.random() * m)];
@@ -56,9 +60,20 @@ const App = () => {
       for (let s = 0; s < search.length; s++) {
         const [nextX, nextY] = [randomX + search[s][0], randomY + search[s][1]];
 
-        if (nextX < 0 || nextY < 0 || nextX >= n || nextY >= m || active[nextX][nextY] === "mine") continue;
+        if (nextX < 0 || nextY < 0 || nextX >= n || nextY >= m || newActive[nextX][nextY] === "mine") continue;
         else newMineStatus[nextX][nextY] = newMineStatus[nextX][nextY] + 1;
       }
+    }
+
+    if (reset) {
+      setVisited(Array.from(Array(n), () => Array(m).fill(0)));
+      setFlag(Array.from(Array(n), () => Array(m).fill(0)));
+
+      setUnlockCount(0);
+      setLastSelect({ X: 0, Y: 0 });
+
+      setFinish(false);
+      setSuccess(false);
     }
 
     setActive([...newActive]);
@@ -137,7 +152,7 @@ const App = () => {
   }, [unlockCount]);
 
   useEffect(() => {
-    setRandomMine();
+    setRandomMine({ reset: false });
     // eslint-disable-next-line
   }, []);
 
@@ -190,7 +205,7 @@ const App = () => {
     <CSS.Container>
       {/* <CSS.Background src={background} /> */}
       <CSS.MineStatus>
-        <CSS.RestartButton onClick={() => {}}>다시 시작</CSS.RestartButton>
+        <CSS.RestartButton onClick={onResetGame}>다시 시작</CSS.RestartButton>
       </CSS.MineStatus>
       <CSS.MineStatus>
         <CSS.StatusFont>
