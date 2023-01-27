@@ -59,23 +59,24 @@ App.StatusFont = styled.span`
 `;
 
 App.MineWrapper = styled.div`
-  width: 600px;
-  height: 600px;
+  width: ${({ x }) => `calc(${25 * x})`};
+  height: ${({ y }) => `calc(${25 * y})`};
 
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px,
+    rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
 
   background-color: white;
 `;
 
 App.MineLine = styled.div`
   width: 100%;
-  height: ${({ length }) => `calc(600px / ${length})`};
+  height: ${({ length }) => `calc(${25 * length}px / ${length})`};
 
   display: flex;
 `;
 
 App.MineBox = styled.div`
-  width: ${({ length }) => `calc(600px / ${length})`};
+  width: ${({ length }) => `calc(${25 * length}px / ${length})`};
   height: 100%;
 
   display: flex;
@@ -166,6 +167,16 @@ App.ObjectImage = styled.div`
     background-image: url("https://minesweeper.online/img/skins/hd/mine_wrong.svg?v=3");
     background-size: 100%;
   }
+`;
+
+App.BottomStatus = styled.div`
+  padding: 20px 0px;
+
+  position: absolute;
+  bottom: 150px;
+  left: 50%;
+
+  transform: translateX(-50%);
 `;
 
 export { App };

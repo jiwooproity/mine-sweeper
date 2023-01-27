@@ -21,9 +21,15 @@ const App = () => {
     false
   );
 
-  const bombLength = 100;
-  const maps = Array.from(Array(25), () => Array(25).fill(""));
+  window.onkeydown = (e) => {
+    if (e.key === "r" || e.key === "R") gameSet();
+  };
+
+  const maps = Array.from(Array(18), () => Array(25).fill(""));
   const [n, m] = [maps.length, maps[0].length];
+
+  const bombLength = (n * m) / 2 - 150;
+
   const [unlockCount, setUnlockCount] = useState(0);
   const [lastSelect, setLastSelect] = useState({ X: 0, Y: 0 });
 
@@ -211,16 +217,21 @@ const App = () => {
   return (
     <CSS.Container>
       {/* <CSS.Background src={background} /> */}
-      <CSS.MineStatus>
-        <CSS.RestartButton onClick={setRandomMine}>다시 시작</CSS.RestartButton>
-      </CSS.MineStatus>
+
       <CSS.MineStatus>
         <CSS.StatusFont>
           {finish ? `실패 !!` : success ? "성공 !!" : "지뢰 찾기"}
           {` - 남은 칸 : ${n * m - bombLength} / ${n * m - bombLength - unlockCount}`}
         </CSS.StatusFont>
       </CSS.MineStatus>
-      <CSS.MineWrapper>{ready && maps.map(getMaps)}</CSS.MineWrapper>
+
+      <CSS.MineWrapper x={n} y={m}>
+        {ready && maps.map(getMaps)}
+      </CSS.MineWrapper>
+
+      <CSS.BottomStatus>
+        <CSS.RestartButton onClick={setRandomMine}>{`다시 시작 ( R )`}</CSS.RestartButton>
+      </CSS.BottomStatus>
     </CSS.Container>
   );
 };
