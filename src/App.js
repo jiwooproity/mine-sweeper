@@ -189,7 +189,7 @@ const App = () => {
     return (
       <CSS.MineBox
         key={Y}
-        className={`type-${mineStatus[X][Y]}`}
+        className={`type-${visited[X][Y] === 1 ? mineStatus[X][Y] : "0"}`}
         length={m}
         active={visited[X][Y] === 1}
         onClick={() => onHandleClick({ X, Y })}
